@@ -187,45 +187,6 @@
   select.has-value {
     color: var(--text);
   }
-
-  /* ── Missing required field highlight (only fires on blocked forward navigation) ── */
-  input.field-missing,
-  select.field-missing,
-  textarea.field-missing {
-    border-color: var(--red) !important;
-    background: rgba(200,33,26,0.04) !important;
-  }
-  /* Shake applied only to the topmost missing field */
-  input.field-missing-shake,
-  select.field-missing-shake,
-  textarea.field-missing-shake {
-    animation: missingShake 0.35s ease;
-  }
-  /* Pages counter flash — fires when user tries to advance with < 4 checked */
-  #pages-counter {
-    display: inline-block;
-  }
-  #pages-counter.counter-flash {
-    color: var(--red) !important;
-    animation: counterShake 0.35s ease;
-  }
-  @keyframes counterShake {
-    0%   { transform: translateX(0); }
-    20%  { transform: translateX(-5px); }
-    40%  { transform: translateX(5px); }
-    60%  { transform: translateX(-3px); }
-    80%  { transform: translateX(2px); }
-    100% { transform: translateX(0); }
-  }
-
-  @keyframes missingShake {
-    0%   { transform: translateX(0); }
-    20%  { transform: translateX(-5px); }
-    40%  { transform: translateX(5px); }
-    60%  { transform: translateX(-3px); }
-    80%  { transform: translateX(2px); }
-    100% { transform: translateX(0); }
-  }
   select option {
     color: var(--text);
   }
@@ -545,38 +506,6 @@
     border-color: rgba(0,0,0,0.25);
   }
 
-  /* Reset button — lives in the rail below the send arrow */
-  .btn-reset-circle {
-    margin-top: 8px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 1.5px solid rgba(200,33,26,0.35);
-    background: var(--white);
-    color: var(--red);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    padding: 0;
-    transition: border-color 0.18s, background 0.18s, box-shadow 0.18s;
-    position: relative;
-  }
-  .btn-reset-circle:hover {
-    border-color: var(--red);
-    background: rgba(200,33,26,0.06);
-    box-shadow: 0 0 0 3px rgba(200,33,26,0.10);
-  }
-  .btn-reset-circle svg {
-    width: 14px;
-    height: 14px;
-    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-  .btn-reset-circle:hover svg {
-    transform: rotate(-45deg);
-  }
-
   .submit-note {
     font-size: 12px;
     color: var(--text-dim);
@@ -624,14 +553,7 @@
     display: flex;
     align-items: flex-start;
     gap: 10px;
-    margin-bottom: 14px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--border);
-  }
-  .phase-row-wrap:last-child {
-    margin-bottom: 4px;
-    padding-bottom: 0;
-    border-bottom: none;
+    margin-bottom: 20px;
   }
 
   .phase-row-wrap > .drag-handle {
@@ -720,17 +642,6 @@
 
   .contract-btn input[type="radio"] {
     display: none;
-  }
-
-  /* Flash individual contract button borders red when user tries to advance without picking one */
-  .contract-btns.contract-missing .contract-btn {
-    animation: contractBtnFlash 0.55s ease forwards;
-  }
-  @keyframes contractBtnFlash {
-    0%   { border-color: rgba(0,0,0,0.10); }
-    18%  { border-color: rgba(200,33,26,0.65); }
-    55%  { border-color: rgba(200,33,26,0.28); }
-    100% { border-color: rgba(0,0,0,0.10); }
   }
 
   /* contract Other expand */
@@ -946,73 +857,28 @@
     opacity: 0.88;
     box-shadow: 0 0 0 4px rgba(42,157,92,0.22);
   }
-  /* Arrow slides right subtly on hover — both greyed and green states */
-  .step-rail-send svg {
-    transition: transform 0.28s cubic-bezier(0.34, 1.4, 0.64, 1);
-  }
-  .step-rail-send:hover svg {
-    transform: translateX(2px);
-  }
 
-  /* ── Rail labels: slide out to the LEFT from behind the dot on hover ── */
-  .step-rail-label {
-    position: absolute;
-    right: calc(100% + 16px); /* gap from dot edge */
-    top: 15px;                /* half of 30px dot — centers on the dot, not the full item */
-    transform: translateY(-50%);
-    white-space: nowrap;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.1px;
-    color: var(--text-dim);
-    background: transparent;
-    padding: 0;
-    pointer-events: none;
-    z-index: 100;
-    max-width: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: max-width 0.24s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.18s ease;
-  }
-  /* Active dot is 33px — nudge center down 1.5px */
-  .step-rail-item.active .step-rail-label {
-    top: 16.5px;
-  }
-  .step-rail-item:hover .step-rail-label {
-    max-width: 140px;
-    opacity: 1;
-  }
-  /* Send + reset: same sliding label as steps 1-5 */
-  .step-rail-send,
-  .btn-reset-circle {
+  /* tooltip labels */
+  .step-dot,
+  .step-rail-send {
     position: relative;
   }
-  .step-rail-send .rail-label,
-  .btn-reset-circle .rail-label {
+  .step-dot[data-label]:hover::after,
+  .step-rail-send[data-label]:hover::after {
+    content: attr(data-label);
     position: absolute;
-    right: calc(100% + 16px);
+    left: calc(100% + 10px);
     top: 50%;
     transform: translateY(-50%);
-    white-space: nowrap;
+    background: var(--black);
+    color: #fff;
     font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.1px;
-    color: var(--text-dim);
-    background: transparent;
-    padding: 0;
+    font-weight: 600;
+    white-space: nowrap;
+    padding: 4px 9px;
+    border-radius: 5px;
     pointer-events: none;
-    z-index: 100;
-    max-width: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: max-width 0.24s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.18s ease;
-  }
-  .step-rail-send:hover .rail-label,
-  .btn-reset-circle:hover .rail-label {
-    max-width: 140px;
-    opacity: 1;
+    z-index: 200;
   }
 
   /* hide rail on very narrow viewports */
@@ -1099,36 +965,23 @@
   <!-- Step rail -->
   <nav class="step-rail" id="stepRail" aria-label="Form steps">
     <div class="step-rail-item active" id="rail-1" data-step="1">
-      <div class="step-dot" onclick="railGo(1)">1</div>
-      <span class="step-rail-label">Project Info</span>
+      <div class="step-dot" data-label="Project Basics" onclick="railGo(1)">1</div>
     </div>
     <div class="step-rail-item locked" id="rail-2" data-step="2">
-      <div class="step-dot" onclick="railGo(2)">2</div>
-      <span class="step-rail-label">Prepared For</span>
+      <div class="step-dot" data-label="Prepared For" onclick="railGo(2)">2</div>
     </div>
     <div class="step-rail-item locked" id="rail-3" data-step="3">
-      <div class="step-dot" onclick="railGo(3)">3</div>
-      <span class="step-rail-label">Project Team</span>
+      <div class="step-dot" data-label="Project Team" onclick="railGo(3)">3</div>
     </div>
     <div class="step-rail-item locked" id="rail-4" data-step="4">
-      <div class="step-dot" onclick="railGo(4)">4</div>
-      <span class="step-rail-label">Proposal Pages</span>
+      <div class="step-dot" data-label="Proposal Pages" onclick="railGo(4)">4</div>
     </div>
     <div class="step-rail-item locked" id="rail-5" data-step="5">
-      <div class="step-dot" onclick="railGo(5)">5</div>
-      <span class="step-rail-label">Additional Notes</span>
+      <div class="step-dot" data-label="Additional Notes" onclick="railGo(5)">5</div>
     </div>
-    <button type="button" class="step-rail-send" id="railSendBtn" onclick="handleRailSend()" style="margin-top:10px;">
-      <span class="rail-label">Send intake</span>
+    <button type="button" class="step-rail-send" id="railSendBtn" data-label="Send intake" onclick="document.getElementById('intakeForm').dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}))" style="margin-top:10px;">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;pointer-events:none;">
-        <path d="M2 7H12M12 7L7.5 2.5M12 7L7.5 11.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
-    <button type="button" class="btn-reset-circle" onclick="resetIntakeForm()" title="Reset form">
-      <span class="rail-label">Reset form</span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:block;pointer-events:none;">
-        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-        <path d="M3 3v5h5"/>
+        <path d="M2 7H12M12 7L7.5 2.5M12 7L7.5 11.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </button>
   </nav>
@@ -1139,17 +992,17 @@
     <div class="form-step active" data-step="1">
     <div class="frozen-notice">⚠️ Complete the highlighted step before editing here.</div>
     <!-- ══════════════════════════════════════
-         SECTION 1 — PROJECT INFO
+         SECTION 1 — PROJECT BASICS
     ══════════════════════════════════════ -->
     <div class="form-section">
       <div class="section-label">
         <span class="section-num">1</span>
-        Project Info
+        Project Basics
       </div>
 
       <div class="field-row">
         <div class="field">
-          <label>OneDrive / SharePoint Link</label>
+          <label>OneDrive / SharePoint Link <span style="color:var(--text-dim);margin-left:4px;font-weight:400;font-size:12px;">(optional)</span></label>
           <input type="text" name="onedrive_link" placeholder="Paste the shared folder link from OneDrive or SharePoint">
         </div>
       </div>
@@ -1359,34 +1212,16 @@
         Proposal Pages
       </div>
 
-      <div style="background:var(--offwhite); border-radius:var(--radius); padding:11px 14px; margin-bottom:18px; font-size:12px; color:var(--text-mid); line-height:1.5;">
-        <span style="font-weight:700; color:var(--text);">Check every page that belongs in this proposal.</span> <span id="pages-counter" style="font-weight:600;color:var(--text-dim);">0 / 4 minimum</span>
-      </div>
+      <p class="helper" style="margin-bottom:16px;">Check every page that belongs in this proposal. <span id="pages-counter" style="font-weight:600;color:var(--text-dim);">0 / 4 minimum</span></p>
 
       <div class="check-grid" style="grid-template-columns:1fr;">
 
-        <!-- ─ Cover Letter ─ -->
-        <div style="font-size:10px;font-weight:700;letter-spacing:0.9px;text-transform:uppercase;color:var(--text-dim);padding-top:4px;">Cover Letter</div>
-
-        <label class="check-item" id="cover-toggle">
-          <input type="checkbox" name="pages" value="Cover Letter" id="cover-cb" onchange="toggleCoverLetter(this)">
-          <span><span class="expand-icon">+</span> Cover Letter
-            <small>Project-specific cover letter</small>
-          </span>
-        </label>
-
-        <!-- Cover Letter sub-panel -->
-        <div id="cover-panel" style="display:none; margin-left:28px; margin-top:6px; margin-bottom:4px;">
-          <textarea id="cover-notes" name="cover_letter_notes" style="min-height:88px;"
-            placeholder="Required — provide cover letter notes on why we're interested in the project, why we're a good fit, and any other relevant details to help write the cover letter."></textarea>
-        </div>
-
         <!-- ─ Project Delivery ─ -->
-        <div style="font-size:10px;font-weight:700;letter-spacing:0.9px;text-transform:uppercase;color:var(--text-dim);padding-top:12px;">Project Delivery</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:0.9px;text-transform:uppercase;color:var(--text-dim);padding-top:4px;">Project Delivery</div>
 
         <label class="check-item">
-          <input type="checkbox" name="pages" value="Project Summary">
-          <span>Project Summary
+          <input type="checkbox" name="pages" value="Exec. Summary">
+          <span>Exec. Summary
             <small>High-level project overview</small>
           </span>
         </label>
@@ -1400,14 +1235,13 @@
 
         <!-- Phasing sub-panel -->
         <div id="phasing-panel" style="display:none; margin-left:28px; margin-top:6px; margin-bottom:4px;">
-          <div style="display:inline-block; background:var(--offwhite); border-radius:var(--radius); padding:7px 12px; margin-bottom:12px; font-size:11px; color:var(--text-mid); line-height:1.45; max-width:340px;"><span style="font-weight:700; color:var(--text);">You can edit each title and subtext.</span> Place in preferred order when done.</div>
+          <div style="font-size:11px; color:var(--text-dim); margin-bottom:8px;">You can edit each title and subtext. Place in preferred order when done.</div>
           <div id="phasing-rows"></div>
-          <div style="display:flex; align-items:center; gap:10px; margin-top:8px; flex-wrap:wrap;">
+          <div style="display:flex; align-items:center; gap:10px; margin-top:8px;">
             <button type="button" class="btn-add" onclick="addPhaseRow()">+ Add phase</button>
-            <button type="button" class="btn-add" id="phase-confirm-btn" onclick="selectPhaseMode('confirmed')" style="border-color:rgba(0,0,0,0.15);">Confirm order</button>
-            <button type="button" class="btn-add" id="phase-draft-btn" onclick="selectPhaseMode('draft')" style="border-color:rgba(0,0,0,0.15);">Build a draft</button>
+            <button type="button" class="btn-add" id="phase-confirm-btn" onclick="togglePhaseConfirm()" style="border-color:rgba(0,0,0,0.15);">Confirm order</button>
           </div>
-          <input type="hidden" name="phase_mode" id="phase_mode" value="">
+          <input type="hidden" name="phase_order_confirmed" id="phase_order_confirmed" value="">
         </div>
 
         <label class="check-item">
@@ -1465,18 +1299,8 @@
           </span>
         </label>
 
-        <!-- ─ Risk Assessment ─ -->
-        <div style="font-size:10px;font-weight:700;letter-spacing:0.9px;text-transform:uppercase;color:var(--text-dim);padding-top:12px;">Risk Assessment</div>
-
-        <label class="check-item">
-          <input type="checkbox" name="pages" value="Risk Assessment">
-          <span>Risk Assessment
-            <small>Named risks + mitigations</small>
-          </span>
-        </label>
-
-        <!-- ─ Relevant Experience ─ -->
-        <div style="font-size:10px;font-weight:700;letter-spacing:0.9px;text-transform:uppercase;color:var(--text-dim);padding-top:12px;">Relevant Experience</div>
+        <!-- ─ Content Pages ─ -->
+        <div style="font-size:10px;font-weight:700;letter-spacing:0.9px;text-transform:uppercase;color:var(--text-dim);padding-top:12px;">Content Pages</div>
 
         <label class="check-item">
           <input type="checkbox" name="pages" value="Relevant Experience" id="exp-cb" onchange="toggleExpPanel(this)">
@@ -1551,8 +1375,12 @@
           <button type="button" class="btn-add" style="margin-top:10px;" onclick="addExpRow()">+ Add unlisted project</button>
         </div>
 
-        <!-- ─ Sustainability ─ -->
-        <div style="font-size:10px;font-weight:700;letter-spacing:0.9px;text-transform:uppercase;color:var(--text-dim);padding-top:12px;">Sustainability</div>
+        <label class="check-item">
+          <input type="checkbox" name="pages" value="Risk Assessment">
+          <span>Risk Assessment
+            <small>Named risks + mitigations</small>
+          </span>
+        </label>
 
         <label class="check-item">
           <input type="checkbox" name="pages" value="Sustainability">
@@ -1561,20 +1389,20 @@
           </span>
         </label>
 
+        <label class="check-item">
+          <input type="checkbox" name="pages" value="References">
+          <span>References
+            <small>Client reference letters</small>
+          </span>
+        </label>
+
         <!-- ─ Appendices ─ -->
         <div style="font-size:10px;font-weight:700;letter-spacing:0.9px;text-transform:uppercase;color:var(--text-dim);padding-top:12px;">Appendices</div>
 
         <label class="check-item">
-          <input type="checkbox" name="pages" value="References">
-          <span>References
-            <small>Client reference letters — Appendix 01</small>
-          </span>
-        </label>
-
-        <label class="check-item">
           <input type="checkbox" name="pages" value="Financial Submission">
           <span>Financial Submission
-            <small>Hourly rates + general requirements — Appendix 02</small>
+            <small>Hourly rates + general requirements</small>
           </span>
         </label>
 
@@ -1607,7 +1435,7 @@
         <label class="check-item">
           <input type="checkbox" name="pages" value="FAQ">
           <span>FAQ
-            <small>Standard FAQ — Appendix 04</small>
+            <small>Standard FAQ — same across all proposals</small>
           </span>
         </label>
 
@@ -1687,19 +1515,11 @@
   function markPhasesChanged() {
     if (phasesChanged) return;
     phasesChanged = true;
-    // If neither mode is selected yet, nudge both buttons red
-    const mode = document.getElementById('phase_mode')?.value;
-    if (!mode) {
-      const confirmBtn = document.getElementById('phase-confirm-btn');
-      const draftBtn   = document.getElementById('phase-draft-btn');
-      if (confirmBtn && !confirmBtn.classList.contains('confirmed')) {
-        confirmBtn.style.borderColor = 'var(--red)';
-        confirmBtn.style.color = 'var(--red)';
-      }
-      if (draftBtn && !draftBtn.classList.contains('confirmed')) {
-        draftBtn.style.borderColor = 'var(--red)';
-        draftBtn.style.color = 'var(--red)';
-      }
+    const btn = document.getElementById('phase-confirm-btn');
+    if (btn && !btn.classList.contains('confirmed')) {
+      btn.style.borderColor = 'var(--red)';
+      btn.style.color = 'var(--red)';
+      btn.textContent = 'Confirm order *';
     }
   }
 
@@ -1711,21 +1531,6 @@
     if (cb.checked && document.getElementById('phasing-rows').children.length === 0) {
       phasesChanged = false; // fresh build = no changes yet
       buildPhasingRows();
-    }
-    if (!cb.checked) {
-      // Reset mode selection when phasing is unchecked
-      const field = document.getElementById('phase_mode');
-      if (field) field.value = '';
-      const confirmBtn = document.getElementById('phase-confirm-btn');
-      const draftBtn   = document.getElementById('phase-draft-btn');
-      [confirmBtn, draftBtn].forEach(b => {
-        if (!b) return;
-        b.classList.remove('confirmed');
-        b.style.borderColor = 'rgba(0,0,0,0.15)';
-        b.style.color = '';
-      });
-      if (confirmBtn) confirmBtn.textContent = 'Confirm order';
-      if (draftBtn)   draftBtn.textContent   = 'Build a draft';
     }
   }
 
@@ -1840,45 +1645,16 @@
     makePhaseRow('', '');
   }
 
-  function selectPhaseMode(mode) {
-    const confirmBtn = document.getElementById('phase-confirm-btn');
-    const draftBtn   = document.getElementById('phase-draft-btn');
-    const field      = document.getElementById('phase_mode');
-    const current    = field.value;
-
-    // Toggle off if already selected
-    if (current === mode) {
-      field.value = '';
-      confirmBtn.classList.remove('confirmed');
-      draftBtn.classList.remove('confirmed');
-      confirmBtn.textContent = 'Confirm order';
-      draftBtn.textContent   = 'Build a draft';
-      confirmBtn.style.borderColor = phasesChanged ? 'var(--red)' : 'rgba(0,0,0,0.15)';
-      confirmBtn.style.color       = phasesChanged ? 'var(--red)' : '';
-      draftBtn.style.borderColor   = phasesChanged ? 'var(--red)' : 'rgba(0,0,0,0.15)';
-      draftBtn.style.color         = phasesChanged ? 'var(--red)' : '';
-      return;
-    }
-
-    // Select the chosen mode, deselect the other
-    field.value = mode;
-
-    // Reset both first
-    [confirmBtn, draftBtn].forEach(b => {
-      b.classList.remove('confirmed');
-      b.style.borderColor = 'rgba(0,0,0,0.15)';
-      b.style.color = '';
-    });
-
-    if (mode === 'confirmed') {
-      confirmBtn.classList.add('confirmed');
-      confirmBtn.textContent = '✓ Order confirmed';
-      draftBtn.textContent   = 'Build a draft';
-    } else {
-      draftBtn.classList.add('confirmed');
-      draftBtn.textContent   = '✓ Build a draft';
-      confirmBtn.textContent = 'Confirm order';
-    }
+  function togglePhaseConfirm() {
+    const btn = document.getElementById('phase-confirm-btn');
+    const field = document.getElementById('phase_order_confirmed');
+    const confirmed = !btn.classList.contains('confirmed');
+    btn.classList.toggle('confirmed', confirmed);
+    // Clear any red "dirty" state when confirming
+    btn.style.borderColor = confirmed ? '' : 'rgba(0,0,0,0.15)';
+    btn.style.color = '';
+    btn.textContent = confirmed ? '✓ Order confirmed' : (phasesChanged ? 'Confirm order *' : 'Confirm order');
+    field.value = confirmed ? 'Yes' : '';
   }
 
   // ── Other Admin sub-panel
@@ -1940,23 +1716,6 @@
   function toggleExpPanel(cb) {
     const panel = document.getElementById('exp-panel');
     panel.style.display = cb.checked ? 'block' : 'none';
-  }
-
-  // ── Cover Letter sub-panel — reveal + conditional required
-  function toggleCoverLetter(cb) {
-    const panel = document.getElementById('cover-panel');
-    const notes = document.getElementById('cover-notes');
-    const icon  = cb.closest('label').querySelector('.expand-icon');
-    if (icon) icon.classList.toggle('is-open', cb.checked);
-    panel.style.display = cb.checked ? 'block' : 'none';
-    notes.required = cb.checked;          // checkbox optional; notes required only when checked
-    if (cb.checked) {
-      setTimeout(() => notes.focus(), 50);
-    } else {
-      notes.value = '';
-      notes.classList.remove('field-missing', 'field-missing-shake');
-    }
-    updateRail();
   }
 
   // ── Show/hide "Other" project type field + gray/dark state
@@ -2076,16 +1835,15 @@
       }
     }
 
-    // Block submit if phasing is checked but neither mode selected
+    // Block submit if phasing was modified but order hasn't been confirmed
     const phasingChecked = document.getElementById('phasing-cb')?.checked;
-    const phaseMode = document.getElementById('phase_mode')?.value;
-    if (!devMode && phasingChecked && !phaseMode) {
-      const confirmBtn = document.getElementById('phase-confirm-btn');
-      const draftBtn   = document.getElementById('phase-draft-btn');
-      [confirmBtn, draftBtn].forEach(b => {
-        if (b) { b.style.borderColor = 'var(--red)'; b.style.color = 'var(--red)'; }
-      });
-      confirmBtn?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (!devMode && phasingChecked && phasesChanged && document.getElementById('phase_order_confirmed')?.value !== 'Yes') {
+      const btn = document.getElementById('phase-confirm-btn');
+      btn.style.borderColor = 'var(--red)';
+      btn.style.color = 'var(--red)';
+      btn.textContent = 'Confirm order *';
+      btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      btn.focus();
       return;
     }
 
@@ -2149,21 +1907,12 @@
 
     const addNotes = data.get('additional_notes') || '—';
 
-    // ⚠️ MASTER RULES DEPENDENCY — FORMAT WARNING
-    // The email body format below is used by Claude (MASTER_RULES.md § Intake auto-scan)
-    // to auto-detect pasted intake submissions and bootstrap project folders.
-    // Detection signals: ━━━ dividers + field labels "PROJECT NAME", "EFFORT LEVEL",
-    // "PROJECT TYPE", "CONTRACT TYPE", "ONEDRIVE".
-    // IF YOU CHANGE SECTION HEADERS, DIVIDERS, OR KEY FIELD LABELS:
-    // → Update MASTER_RULES.md § "Intake auto-scan + project bootstrap rule" to match.
-    // File: /00_START_HERE/MASTER_RULES.md
-
     const body = [
       `ENDURO CONSTRUCTION — PROPOSAL INTAKE`,
       `Submitted: ${new Date().toLocaleDateString('en-CA')}`,
       ``,
       `━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-      `1. PROJECT INFO`,
+      `1. PROJECT BASICS`,
       `━━━━━━━━━━━━━━━━━━━━━━━━━━`,
       `Project:         ${projectName}`,
       `OneDrive Link:   ${onedriveLink}`,
@@ -2212,11 +1961,7 @@
       ...extraExpLines,
       phasingLines.length ? `\n  Phasing:` : '',
       ...phasingLines,
-      phasingLines.length ? `  Phase order: ${
-        document.getElementById('phase_mode')?.value === 'confirmed' ? 'Confirmed ✓' :
-        document.getElementById('phase_mode')?.value === 'draft'     ? 'Build a draft — Claude to generate based on scope ✦' :
-        'Not confirmed'
-      }` : '',
+      phasingLines.length ? `  Phase order confirmed: ${document.getElementById('phase_order_confirmed')?.value === 'Yes' ? 'Yes ✓' : 'Not confirmed'}` : '',
       ``,
       `━━━━━━━━━━━━━━━━━━━━━━━━━━`,
       `6. ADDITIONAL NOTES`,
@@ -2246,7 +1991,6 @@
   // Track which dots were unlocked/done last render so we can detect newly-unlocked
   const _prevUnlocked = new Set();
   let _prevSendReady = false;
-
 
   function isStepValid(n) {
     if (devMode) return true;
@@ -2377,149 +2121,40 @@
   }
 
   function showStep(n) {
-    // Clear any lingering missing-field highlights and contract flash before switching steps
-    document.querySelectorAll('.field-missing, .field-missing-shake')
-      .forEach(el => el.classList.remove('field-missing', 'field-missing-shake'));
-    document.querySelectorAll('.contract-btns.contract-missing')
-      .forEach(el => el.classList.remove('contract-missing'));
-document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active', 'frozen'));
+    document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active', 'frozen'));
     document.querySelector(`.form-step[data-step="${n}"]`).classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     currentStep = n;
     visitedSteps.add(n);
     updateRail();
-    // No auto-highlight on arrival — highlights only fire when user tries to advance
   }
 
-  // Build an ordered list of missing required items for a step.
-  // Step 1 order is explicit to guarantee: name → brief → client → contract → type → deadline → effort
-  function getMissingItems(n) {
-    const step = document.querySelector(`.form-step[data-step="${n}"]`);
-    const items = [];
-
-    if (n === 1) {
-      // Explicit ordered list for step 1
-      const order = [
-        { name: 'project_name',  type: 'field' },
-        { name: 'brief_scope',   type: 'field' },
-        { name: 'client',        type: 'field' },
-        { name: '__contract__',  type: 'contract' },
-        { name: 'project_type',  type: 'field' },
-        { name: 'deadline_draft',type: 'field' },
-        { name: 'effort_level',  type: 'field' },
-      ];
-      for (const entry of order) {
-        if (entry.type === 'contract') {
-          const picked = step.querySelector('input[name="contract_type"]:checked');
-          if (!picked) {
-            const contractRow = step.querySelector('.contract-btns');
-            if (contractRow) items.push({ type: 'contract', el: contractRow });
-          }
-        } else {
-          const el = step.querySelector(`[name="${entry.name}"]`);
-          if (el && !el.value.trim()) items.push({ type: 'field', el });
-        }
-      }
-      return items;
-    }
-
-    // Steps 2, 3: required fields in DOM order
-    const required = step.querySelectorAll('[required]');
-    for (const el of required) {
-      if (!el.value.trim()) items.push({ type: 'field', el });
-    }
-
-    // Step 4: pages checkboxes (≥4 required)
-    if (n === 4) {
-      const checked = step.querySelectorAll('input[name="pages"]:checked').length;
-      if (checked < 4) {
-        const grid = step.querySelector('.check-grid');
-        if (grid) items.push({ type: 'pages', el: grid });
-      }
-    }
-
-    return items;
-  }
-
-  function flashContractBtns() {
-    const contractRow = document.querySelector('.contract-btns');
-    if (!contractRow) return;
-    contractRow.classList.remove('contract-missing');
-    void contractRow.offsetWidth; // restart animation
-    contractRow.classList.add('contract-missing');
-    // Clear after selection
-    const clear = () => {
-      contractRow.classList.remove('contract-missing');
-      contractRow.removeEventListener('change', clear);
-    };
-    contractRow.addEventListener('change', clear, { once: true });
-  }
-
-  // Progressive single-field validation:
-  // Each blocked forward attempt reveals only the topmost still-unfilled required item.
-  // Once that item is filled, the next attempt reveals the one below it, and so on.
   function validateStep(n) {
     if (devMode) return true;
-    // getMissingItems returns only currently-unfilled required items in correct order.
-    // Always target index 0 — it IS the topmost missing field on every call.
-    // No index tracking needed: as each field gets filled it drops off the list naturally.
-    const items = getMissingItems(n);
-    if (items.length === 0) return true;
-    highlightMissingItem(items[0]);
-    return false;
-  }
-
-  // Show and scroll to a single missing item (shake for field, flash for contract)
-  function highlightMissingItem(item) {
-    if (item.type === 'field') {
-      markMissing(item.el, true);
-      item.el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      item.el.focus({ preventScroll: true });
-    } else if (item.type === 'contract') {
-      flashContractBtns();
-      item.el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    } else if (item.type === 'pages') {
-      // Scroll to top first, then after scroll settles flash the counter
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      setTimeout(() => {
-        const counter = document.getElementById('pages-counter');
-        if (counter) {
-          counter.classList.remove('counter-flash');
-          void counter.offsetWidth; // restart animation
-          counter.classList.add('counter-flash');
-          counter.addEventListener('animationend', () => counter.classList.remove('counter-flash'), { once: true });
-        }
-      }, 150);
+    const step = document.querySelector(`.form-step[data-step="${n}"]`);
+    const required = step.querySelectorAll('[required]');
+    for (const el of required) {
+      if (!el.value.trim()) { el.focus(); return false; }
     }
-  }
-
-  // Red border + shake animation on a single field
-  function markMissing(el, shake = false) {
-    el.classList.add('field-missing');
-    if (shake) {
-      el.classList.remove('field-missing-shake');
-      void el.offsetWidth; // reflow to restart animation
-      el.classList.add('field-missing-shake');
+    if (n === 1) {
+      const contractPicked = step.querySelector('input[name="contract_type"]:checked');
+      if (!contractPicked) {
+        document.querySelector('.contract-btns').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return false;
+      }
     }
-    const clear = () => {
-      el.classList.remove('field-missing', 'field-missing-shake');
-      el.removeEventListener('input', clear);
-      el.removeEventListener('change', clear);
-    };
-    el.addEventListener('input', clear);
-    el.addEventListener('change', clear);
-  }
-
-  // Rail send button handler — submits when ready, or triggers progressive validation when not
-  function handleRailSend() {
-    const btn = document.getElementById('railSendBtn');
-    if (btn && btn.classList.contains('ready')) {
-      // Form is fully valid — submit
-      document.getElementById('intakeForm').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-    } else {
-      // Not ready — bounce the topmost missing field on the current step
-      validateStep(currentStep);
+    if (n === 4) {
+      const checked = document.querySelectorAll('input[name="pages"]:checked').length;
+      if (checked < 4) {
+        document.querySelector('.check-grid').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return false;
+      }
     }
+    if (n === 5) {
+      const notes = document.querySelector('textarea[name="additional_notes"]');
+      if (!notes || !notes.value.trim()) { notes.focus(); return false; }
+    }
+    return true;
   }
 
   // Rail click handler
@@ -2529,13 +2164,14 @@ document.querySelectorAll('.form-step').forEach(el => el.classList.remove('activ
     if (!allEverCompleted) {
       // Sequential mode: allow going back freely
       if (n < currentStep) { showStep(n); return; }
-      // Forward: only advance if current step is valid (clicking 3, 4, 5 all bounce the same as clicking 2)
-      if (isStepValid(currentStep)) {
+      // Forward: only allow one step at a time, and only if current step is valid
+      if (n === currentStep + 1 && isStepValid(currentStep)) {
         stepDone.add(currentStep);
-        // Only move one step at a time even if they clicked further ahead
-        showStep(currentStep + 1);
+        showStep(n);
+      } else if (n > currentStep + 1) {
+        return; // can't skip ahead
       } else {
-        validateStep(currentStep); // progressive bounce on topmost missing field
+        validateStep(currentStep); // focus first missing field
       }
       return;
     }
@@ -2560,28 +2196,6 @@ document.querySelectorAll('.form-step').forEach(el => el.classList.remove('activ
     } else {
       showStep(currentStep - 1);
     }
-  }
-
-  // ── Reset form — clears all fields and returns to step 1
-  function resetIntakeForm() {
-    // Use native confirm — clean, no dependencies, blocks accidental wipes
-    if (!window.confirm('Reset the entire form?\n\nAll entries will be cleared and you\'ll return to step 1.')) return;
-    document.getElementById('intakeForm').reset();
-    // Clear any dynamically added rows (team, phases, expenses, extras)
-    ['team-rows','phase-rows','exp-rows','other-admin-rows','opt-rows'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.innerHTML = '';
-    });
-    // Reset step state
-    stepDone.clear();
-    allEverCompleted = false;
-    showStep(1);
-    // Re-lock all rail items
-    for (let n = 1; n <= TOTAL_STEPS; n++) {
-      const rail = document.getElementById('rail-' + n);
-      if (rail) { rail.classList.remove('done','active'); if (n > 1) rail.classList.add('locked'); }
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   // ── Dev Mode — bypasses all validation
